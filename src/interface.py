@@ -3,7 +3,12 @@ from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCh
 
 app = QApplication([])
 app.setApplicationName("WinPostInstaller")
+
+
 window = QWidget()
+window_width = 750
+window_height = 400
+window.setGeometry(650, 300, window_width, window_height)
 window.setWindowTitle("WinPostInstaller")
 
 
