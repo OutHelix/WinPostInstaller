@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QMainWindow, QPushButton, QFontComboBox
+from PyQt5.QtWidgets import (QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QMainWindow,
+                             QPushButton, QFontComboBox)
 from PyQt5.QtCore import Qt
 
 
@@ -63,6 +64,7 @@ def select_button_clicked():
         if state:
             print(checkbox.text())
             print("Выбрать и установить")
+
 
 def cancel_button_clicked():
     print("Отменить выбор")
