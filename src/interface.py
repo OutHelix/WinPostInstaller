@@ -156,6 +156,11 @@ def select_button_clicked():
 
 
 def cancel_button_clicked():
+    global checkbox_states
+    for checkbox in checkbox_states.keys():
+        checkbox.setChecked(False)
+    checkbox_states = {checkbox: False for checkbox in checkbox_states.keys()}
+    update_selected_count()
     print("Отменить выбор")
 
 
