@@ -5,9 +5,9 @@ import subprocess
 import requests
 
 CURRENT_PATH = os.getcwd()
-ARCHIVE_PATH = CURRENT_PATH + "/Downloads.py"
+ARCHIVE_PATH = CURRENT_PATH + "/Downloads.zip"
 EXTRACT_PATH = CURRENT_PATH + "/Downloads"
-ARCHIVE_URL = "https://mega.nz/file/eUMlHTQb#rCIdO_IHYqfjYjHXt0tTzsnyB5yoDjkSV4tHi3jm2Ec"
+ARCHIVE_URL = "https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1qGbBqnwju7w8YT8zrWQwO4P589sqfs-T"
 
 APPLICATION = {
     "Discord": "DiscordSetup.exe",
@@ -36,7 +36,7 @@ def download_archive(url, save_path):
     print("Архив успешно скачан!")
 
 
-# Функция извлечения, для работы нужен архив!
+# Функция извлечения
 def button_clicked(selection):
     # Проверяем наличие архива
     if not os.path.exists(ARCHIVE_PATH):
@@ -49,6 +49,3 @@ def button_clicked(selection):
                 app_file = APPLICATION[app]
                 archive.extract(app_file, EXTRACT_PATH)
                 print(f"Приложение {app} успешно извлечено!")
-
-
-download_archive(ARCHIVE_URL, ARCHIVE_PATH)
