@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCh
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QColor, QPainter, QPixmap, QIcon
 import sys
-
+from main import button_clicked
 
 app = QApplication([])
 app.setApplicationName("WinPostInstaller")
@@ -148,10 +148,11 @@ cancel_button = QPushButton("Отмена")
 
 
 def select_button_clicked():
+    selection = []
     for checkbox, state in checkbox_states.items():
         if state:
-            print(checkbox.text())
-            print("Выбрать и установить")
+            selection.append(checkbox.text())
+    # button_clicked(selection)
 
 
 def cancel_button_clicked():
@@ -174,8 +175,10 @@ QCheckBox {
 """
 
 
-select_button.setStyleSheet("background-color: #F0FFFF; border-color: #E6E6FA; border-style: solid; border-width: 4px; border-radius: 6px; color: black;")
-cancel_button.setStyleSheet("background-color: #F0FFFF; border-color: #00CED1; border-style: solid; border-width: 4px; border-radius: 6px; color: black;")
+select_button.setStyleSheet("background-color: #F0FFFF; border-color: #E6E6FA; border-style: solid; border-width: 4px;"
+                            " border-radius: 6px; color: black;")
+cancel_button.setStyleSheet("background-color: #F0FFFF; border-color: #00CED1; border-style: solid; border-width: 4px;"
+                            " border-radius: 6px; color: black;")
 checkbox1.setStyleSheet(checkbox_style)
 checkbox2.setStyleSheet(checkbox_style)
 checkbox3.setStyleSheet(checkbox_style)
