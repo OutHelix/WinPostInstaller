@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QMainWindow, \
-    QPushButton, QFontComboBox, QGridLayout
+    QPushButton, QFontComboBox
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QColor, QPainter, QPixmap, QIcon
 import sys
@@ -103,20 +103,27 @@ layout.addSpacing(20)
 layout.addLayout(column_layout5)
 
 
-layout.addWidget(status_label, alignment=Qt.AlignBottom | Qt.AlignLeft)
+checkbox_states = {checkbox1: checkbox1.isChecked(), checkbox2: checkbox2.isChecked(), checkbox3: checkbox3.isChecked(),
+                   checkbox4: checkbox4.isChecked(), checkbox5: checkbox5.isChecked(), checkbox6: checkbox6.isChecked(),
+                   checkbox7: checkbox7.isChecked(), checkbox8: checkbox8.isChecked(), checkbox9: checkbox9.isChecked(),
+                   checkbox10: checkbox10.isChecked(), checkbox11: checkbox11.isChecked(),
+                   checkbox12: checkbox12.isChecked(), checkbox13: checkbox13.isChecked(),
+                   checkbox14: checkbox14.isChecked(), checkbox15: checkbox15.isChecked()}
 
 
-checkbox_states = {}
+selected_count = sum(checkbox_states.values())
+status_label.setText(f"Выбрано {selected_count} пункт(ов):")
+
+
+def update_selected_count():
+    selected_counter = sum(checkbox_states.values())
+    status_label.setText(f"Выбрано {selected_counter} пункт(ов):")
 
 
 def checkbox_changed():
     sender = window.sender()
     checkbox_states[sender] = sender.isChecked()
-    selected_count = sum(checkbox_states.values())
-    if selected_count == 0:
-        status_label.setText("Пожалуйста, выберете программу/ы для установки.")
-    else:
-        status_label.setText(f"Вы выбрали {selected_count} пункт(ов):")
+    update_selected_count()
 
 
 checkbox1.stateChanged.connect(checkbox_changed)
@@ -136,7 +143,6 @@ checkbox14.stateChanged.connect(checkbox_changed)
 checkbox15.stateChanged.connect(checkbox_changed)
 
 
-
 select_button = QPushButton("Выбрать и установить")
 cancel_button = QPushButton("Отмена")
 
@@ -146,6 +152,7 @@ def select_button_clicked():
         if state:
             print(checkbox.text())
             print("Выбрать и установить")
+
 
 def cancel_button_clicked():
     print("Отменить выбор")
@@ -162,8 +169,8 @@ QCheckBox {
 """
 
 
-select_button.setStyleSheet("background-color: green; color: white;")
-cancel_button.setStyleSheet("background-color: red; color: white;")
+select_button.setStyleSheet("background-color: #F0FFFF; border-color: #E6E6FA; border-style: solid; border-width: 4px; border-radius: 6px; color: black;")
+cancel_button.setStyleSheet("background-color: #F0FFFF; border-color: #00CED1; border-style: solid; border-width: 4px; border-radius: 6px; color: black;")
 checkbox1.setStyleSheet(checkbox_style)
 checkbox2.setStyleSheet(checkbox_style)
 checkbox3.setStyleSheet(checkbox_style)
@@ -184,6 +191,10 @@ button_layout = QHBoxLayout()
 button_layout.addStretch(1)
 button_layout.addWidget(select_button)
 button_layout.addWidget(cancel_button)
+
+status_layout = QHBoxLayout()
+status_layout.addWidget(status_label, alignment=Qt.AlignLeft | Qt.AlignBottom)
+layout.addLayout(status_layout)
 
 
 layout.addLayout(button_layout)
@@ -225,6 +236,18 @@ icon_size = 20
 checkbox1.setIconSize(QSize(icon_size, icon_size))
 checkbox2.setIconSize(QSize(icon_size, icon_size))
 checkbox3.setIconSize(QSize(icon_size, icon_size))
+checkbox4.setIconSize(QSize(icon_size, icon_size))
+checkbox5.setIconSize(QSize(icon_size, icon_size))
+checkbox6.setIconSize(QSize(icon_size, icon_size))
+checkbox7.setIconSize(QSize(icon_size, icon_size))
+checkbox8.setIconSize(QSize(icon_size, icon_size))
+checkbox9.setIconSize(QSize(icon_size, icon_size))
+checkbox10.setIconSize(QSize(icon_size, icon_size))
+checkbox11.setIconSize(QSize(icon_size, icon_size))
+checkbox12.setIconSize(QSize(icon_size, icon_size))
+checkbox13.setIconSize(QSize(icon_size, icon_size))
+checkbox14.setIconSize(QSize(icon_size, icon_size))
+checkbox15.setIconSize(QSize(icon_size, icon_size))
 window.setLayout(layout)
 
 
