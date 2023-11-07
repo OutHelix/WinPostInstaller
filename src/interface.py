@@ -152,7 +152,8 @@ def select_button_clicked():
     for checkbox, state in checkbox_states.items():
         if state:
             selection.append(checkbox.text())
-    # button_clicked(selection)
+    if selection:
+        button_clicked(selection)
 
 
 def cancel_button_clicked():
