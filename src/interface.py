@@ -10,7 +10,7 @@ class WinPostInstaller(QWidget):
 
     def init_ui(self):
         self.setWindowTitle("WinPostInstaller")
-        self.setStyleSheet("background-color: #1E1E1E;")
+        self.setStyleSheet("background-color: #2C394B; color: white;")
         self.setGeometry(650, 300, 750, 400)
 
         layout = QHBoxLayout(self)
@@ -48,7 +48,7 @@ class WinPostInstaller(QWidget):
         self.cancel_button = QPushButton("Отмена")
 
         self.select_button.setStyleSheet(
-            "background-color: #F0FFFF; border-color: #E6E6FA; border-style: solid; border-width: 4px;"
+            "background-color: #F0FFFF; border-color: #9370DB; border-style: solid; border-width: 4px;"
             " border-radius: 6px; color: black;")
         self.cancel_button.setStyleSheet(
             "background-color: #F0FFFF; border-color: #00CED1; border-style: solid; border-width: 4px;"
