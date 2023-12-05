@@ -2,6 +2,11 @@ from PyQt6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCh
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
 
+class ProgramCheckbox(QCheckBox):
+    def __init__(self, text, icon_path):
+        super().__init__(text)
+        self.setIcon(QIcon(icon_path))
+        self.setIconSize(QSize(20, 20))
 
 class WinPostInstaller(QWidget):
     def __init__(self):
@@ -13,37 +18,48 @@ class WinPostInstaller(QWidget):
         self.setStyleSheet("background-color: #2C394B; color: white;")
         self.setGeometry(650, 300, 750, 400)
 
-        layout = QHBoxLayout(self)
-        self.setLayout(layout)
+        self.layout = QHBoxLayout(self)
+        self.setLayout(self.layout)
 
-        columns = []
+        self.create_checkboxes()
+        self.create_buttons()
+        self.create_status_label()
+        self.update_selected_count()
 
-        for _ in range(3):
-            column_layout = QVBoxLayout()
-            columns.append(column_layout)
-            layout.addLayout(column_layout)
+    def create_checkboxes(self):
+        columns = [QVBoxLayout() for _ in range(3)]
+        checkbox_layouts = {0: columns[0], 1: columns[1], 2: columns[2]}
 
         checkboxes = [
-            ("Discord", "discord.png"), ("Zoom", "zoom.png"), ("Telegram", "telegram.png"),
-            ("Yandex Browser", "yandex.png"), ("Vivaldi", "vivaldi.png"), ("BraveBrowser", "brave.png"),
-            ("Chrome", "chrome.png"), ("AnyDesk", "anyDesk.png"), ("WinRar", "winRar.png"),
-            ("Steam", "steam.png"), ("Epic Games Launcher", "epicGames.png"), ("MSI Afterburner", "msiAfterburner.png"),
-            ("CPU-Z", "cpu-z.png"), ("LA Pleer", "laPleer.png"), ("Nvidia GeForce Experience", "geforceExperience.png")
+            ("Discord", r"\WinPostInstaller\icons\discord.png"), ("Zoom", r"\WinPostInstaller\icons\zoom.png"),
+            ("Telegram", r"\WinPostInstaller\icons\telegram.png"),
+            ("Yandex Browser", r"\WinPostInstaller\icons\yandex.png"),
+            ("Vivaldi", r"\WinPostInstaller\icons\vivaldi.png"), ("BraveBrowser", r"\WinPostInstaller\icons\brave.png"),
+            ("Chrome", r"\WinPostInstaller\icons\chrome.png"), ("AnyDesk", r"\WinPostInstaller\icons\anydesk.png"),
+            ("WinRar", r"\WinPostInstaller\icons\winrar.png"),
+            ("Steam", r"\WinPostInstaller\icons\steam.png"),
+            ("Epic Games Launcher", r"\WinPostInstaller\icons\epic games.png"),
+            ("MSI Afterburner", r"\WinPostInstaller\icons\msi.png"),
+            ("CPU-Z", r"\WinPostInstaller\icons\cpu-z.png"), ("LA Pleer", r"\WinPostInstaller\icons\la.png"),
+            ("Nvidia GeForce Experience", r"\WinPostInstaller\icons\nvidia.png")
         ]
 
-        checkbox_objects = []
+        self.checkbox_objects = []
 
         for text, icon_path in checkboxes:
-            checkbox = QCheckBox(text)
-            checkbox.setIcon(QIcon(icon_path))
-            checkbox.setIconSize(QSize(20, 20))
-            checkbox_objects.append(checkbox)
+            checkbox = ProgramCheckbox(text, icon_path)
+            self.checkbox_objects.append(checkbox)
 
-            columns[checkboxes.index((text, icon_path)) % 3].addWidget(checkbox)
+            column_index = checkboxes.index((text, icon_path)) % 3
+            checkbox_layouts[column_index].addWidget(checkbox)
             checkbox.stateChanged.connect(self.checkbox_changed)
 
-        layout.addSpacing(20)
+        self.layout.addSpacing(20)
+        self.layout.addLayout(columns[0])
+        self.layout.addLayout(columns[1])
+        self.layout.addLayout(columns[2])
 
+    def create_buttons(self):
         self.select_button = QPushButton("Выбрать и установить")
         self.cancel_button = QPushButton("Отмена")
 
@@ -61,34 +77,30 @@ class WinPostInstaller(QWidget):
         button_layout.addStretch(1)
         button_layout.addWidget(self.select_button)
         button_layout.addWidget(self.cancel_button)
-        layout.addLayout(button_layout)
+        self.layout.addLayout(button_layout)
 
+    def create_status_label(self):
         self.status_label = QLabel()
         self.status_label.setStyleSheet("color: white;")
         status_layout = QHBoxLayout()
         status_layout.addWidget(self.status_label, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
-        layout.addLayout(status_layout)
-
-        self.update_selected_count()
+        self.layout.addLayout(status_layout)
 
     def update_selected_count(self):
-        checkbox_objects = self.findChildren(QCheckBox)
-        selected_count = sum(checkbox.isChecked() for checkbox in checkbox_objects)
+        selected_count = sum(checkbox.isChecked() for checkbox in self.checkbox_objects)
         self.status_label.setText(f"Выбрано {selected_count} пункт(ов):")
 
     def checkbox_changed(self):
         self.update_selected_count()
 
     def select_button_clicked(self):
-        checkbox_objects = self.findChildren(QCheckBox)
-        selected_checkboxes = [checkbox.text() for checkbox in checkbox_objects if checkbox.isChecked()]
+        selected_checkboxes = [checkbox.text() for checkbox in self.checkbox_objects if checkbox.isChecked()]
 
         if selected_checkboxes:
             self.button_clicked(selected_checkboxes)
 
     def cancel_button_clicked(self):
-        checkbox_objects = self.findChildren(QCheckBox)
-        for checkbox in checkbox_objects:
+        for checkbox in self.checkbox_objects:
             checkbox.setChecked(False)
 
         self.update_selected_count()
@@ -96,12 +108,12 @@ class WinPostInstaller(QWidget):
 
     def button_clicked(self, selected_checkboxes):
         print("Выбранные программы:", selected_checkboxes)
-        
 
-app = QApplication([])
-app.setApplicationName("WinPostInstaller")
+if __name__ == "__main__":
+    app = QApplication([])
+    app.setApplicationName("WinPostInstaller")
 
-win_post_installer = WinPostInstaller()
-win_post_installer.show()
+    win_post_installer = WinPostInstaller()
+    win_post_installer.show()
 
-app.exec()
+    app.exec()
