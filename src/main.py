@@ -30,7 +30,6 @@ APPLICATION = {
 
 # функция для скачивания архива
 def download_archive(url, save_path, update_status_callback):
-    print('ddddd')
     response = requests.get(url, stream=True)
     total_length = response.headers.get('content-length')
 

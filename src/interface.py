@@ -1,8 +1,10 @@
 import os
+import threading
 from PyQt6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtCore import QTimer
+
 
 CURRENT_PATH_WPI = os.getcwd()[:-4]
 
@@ -111,6 +113,10 @@ class WinPostInstaller(QWidget):
             self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
 
     def start_download(self, selected_checkboxes, url, path):
+        download_thread = threading.Thread(target=self.download_and_extract_threaded, args=(selected_checkboxes, url, path))
+        download_thread.start()
+
+    def download_and_extract_threaded(self, selected_checkboxes, url, path):
         from main import download_and_extract
         download_and_extract(url, path, selected_checkboxes, self.update_status)
 
