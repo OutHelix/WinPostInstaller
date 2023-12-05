@@ -1,12 +1,18 @@
+import os
 from PyQt6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import QTimer
+
+CURRENT_PATH_WPI = os.getcwd()[:-4]
+
 
 class ProgramCheckbox(QCheckBox):
     def __init__(self, text, icon_path):
         super().__init__(text)
         self.setIcon(QIcon(icon_path))
         self.setIconSize(QSize(20, 20))
+
 
 class WinPostInstaller(QWidget):
     def __init__(self):
@@ -27,21 +33,25 @@ class WinPostInstaller(QWidget):
         self.update_selected_count()
 
     def create_checkboxes(self):
+        print(CURRENT_PATH_WPI)
         columns = [QVBoxLayout() for _ in range(3)]
         checkbox_layouts = {0: columns[0], 1: columns[1], 2: columns[2]}
-
         checkboxes = [
-            ("Discord", r"\WinPostInstaller\icons\discord.png"), ("Zoom", r"\WinPostInstaller\icons\zoom.png"),
-            ("Telegram", r"\WinPostInstaller\icons\telegram.png"),
-            ("Yandex Browser", r"\WinPostInstaller\icons\yandex.png"),
-            ("Vivaldi", r"\WinPostInstaller\icons\vivaldi.png"), ("BraveBrowser", r"\WinPostInstaller\icons\brave.png"),
-            ("Chrome", r"\WinPostInstaller\icons\chrome.png"), ("AnyDesk", r"\WinPostInstaller\icons\anydesk.png"),
-            ("WinRar", r"\WinPostInstaller\icons\winrar.png"),
-            ("Steam", r"\WinPostInstaller\icons\steam.png"),
-            ("Epic Games Launcher", r"\WinPostInstaller\icons\epic games.png"),
-            ("MSI Afterburner", r"\WinPostInstaller\icons\msi.png"),
-            ("CPU-Z", r"\WinPostInstaller\icons\cpu-z.png"), ("LA Pleer", r"\WinPostInstaller\icons\la.png"),
-            ("Nvidia GeForce Experience", r"\WinPostInstaller\icons\nvidia.png")
+            ("Discord", f"{CURRENT_PATH_WPI}\\icons\\discord.png"),
+            ("Zoom", f"{CURRENT_PATH_WPI}\\icons\\zoom.png"),
+            ("Telegram", f"{CURRENT_PATH_WPI}\\icons\\telegram.png"),
+            ("Yandex Browser", f"{CURRENT_PATH_WPI}\\icons\\yandex.png"),
+            ("Vivaldi", f"{CURRENT_PATH_WPI}\\icons\\vivaldi.png"),
+            ("BraveBrowser", f"{CURRENT_PATH_WPI}\\icons\\brave.png"),
+            ("Chrome", f"{CURRENT_PATH_WPI}\\icons\\chrome.png"),
+            ("AnyDesk", f"{CURRENT_PATH_WPI}\\icons\\anydesk.png"),
+            ("WinRar", f"{CURRENT_PATH_WPI}\\icons\\winrar.png"),
+            ("Steam", f"{CURRENT_PATH_WPI}\\icons\\steam.png"),
+            ("Epic Games Launcher", f"{CURRENT_PATH_WPI}\\icons\\epic games.png"),
+            ("MSI Afterburner", f"{CURRENT_PATH_WPI}\\icons\\msi.png"),
+            ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
+            ("LA Pleer", f"{CURRENT_PATH_WPI}\\icons\\la.png"),
+            ("Nvidia GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png")
         ]
 
         self.checkbox_objects = []
@@ -97,23 +107,18 @@ class WinPostInstaller(QWidget):
         selected_checkboxes = [checkbox.text() for checkbox in self.checkbox_objects if checkbox.isChecked()]
 
         if selected_checkboxes:
-            self.button_clicked(selected_checkboxes)
+            from main import ARCHIVE_URL, ARCHIVE_PATH
+            self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
+
+    def start_download(self, selected_checkboxes, url, path):
+        from main import download_and_extract
+        download_and_extract(url, path, selected_checkboxes, self.update_status)
+
+    def update_status(self, text):
+        self.status_label.setText(f"Статус: {text}")
 
     def cancel_button_clicked(self):
         for checkbox in self.checkbox_objects:
             checkbox.setChecked(False)
 
         self.update_selected_count()
-        print("Отменить выбор")
-
-    def button_clicked(self, selected_checkboxes):
-        print("Выбранные программы:", selected_checkboxes)
-
-if __name__ == "__main__":
-    app = QApplication([])
-    app.setApplicationName("WinPostInstaller")
-
-    win_post_installer = WinPostInstaller()
-    win_post_installer.show()
-
-    app.exec()
