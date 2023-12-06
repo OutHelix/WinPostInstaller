@@ -25,6 +25,7 @@ class WinPostInstaller(QWidget):
         self.setWindowTitle("WinPostInstaller")
         self.setStyleSheet("background-color: #2C394B; color: white;")
         self.setGeometry(650, 300, 750, 400)
+        self.setFixedSize(750, 250)
 
         self.layout = QHBoxLayout(self)
         self.setLayout(self.layout)
@@ -49,11 +50,11 @@ class WinPostInstaller(QWidget):
             ("AnyDesk", f"{CURRENT_PATH_WPI}\\icons\\anydesk.png"),
             ("WinRar", f"{CURRENT_PATH_WPI}\\icons\\winrar.png"),
             ("Steam", f"{CURRENT_PATH_WPI}\\icons\\steam.png"),
-            ("Epic Games Launcher", f"{CURRENT_PATH_WPI}\\icons\\epic games.png"),
+            ("Epic Games", f"{CURRENT_PATH_WPI}\\icons\\epic games.png"),
             ("MSI Afterburner", f"{CURRENT_PATH_WPI}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
             ("LA Pleer", f"{CURRENT_PATH_WPI}\\icons\\la.png"),
-            ("Nvidia GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png")
+            ("GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png")
         ]
 
         self.checkbox_objects = []
