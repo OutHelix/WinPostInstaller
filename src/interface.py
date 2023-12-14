@@ -74,22 +74,16 @@ class WinPostInstaller(QWidget):
 
     def create_buttons(self):
         self.select_button = QPushButton("Выбрать и установить")
-        self.cancel_button = QPushButton("Отмена")
 
         self.select_button.setStyleSheet(
             "background-color: #F0FFFF; border-color: #9370DB; border-style: solid; border-width: 4px;"
             " border-radius: 6px; color: black;")
-        self.cancel_button.setStyleSheet(
-            "background-color: #F0FFFF; border-color: #00CED1; border-style: solid; border-width: 4px;"
-            " border-radius: 6px; color: black;")
 
         self.select_button.clicked.connect(self.select_button_clicked)
-        self.cancel_button.clicked.connect(self.cancel_button_clicked)
 
         button_layout = QHBoxLayout()
         button_layout.addStretch(1)
         button_layout.addWidget(self.select_button)
-        button_layout.addWidget(self.cancel_button)
         self.layout.addLayout(button_layout)
 
     def create_status_label(self):
@@ -101,7 +95,7 @@ class WinPostInstaller(QWidget):
 
     def update_selected_count(self):
         selected_count = sum(checkbox.isChecked() for checkbox in self.checkbox_objects)
-        self.status_label.setText(f"Выбрано {selected_count} пункт(ов):")
+        self.status_label.setText(f"Выбрано {selected_count} пункт(ов)")
 
     def checkbox_changed(self):
         self.update_selected_count()
@@ -123,9 +117,3 @@ class WinPostInstaller(QWidget):
 
     def update_status(self, text):
         self.status_label.setText(f"Статус: {text}")
-
-    def cancel_button_clicked(self):
-        for checkbox in self.checkbox_objects:
-            checkbox.setChecked(False)
-
-        self.update_selected_count()
