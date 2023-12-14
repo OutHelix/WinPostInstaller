@@ -31,8 +31,8 @@ class WinPostInstaller(QWidget):
         self.setLayout(self.layout)
 
         self.create_checkboxes()
-        self.create_buttons()
-        self.create_status_label()
+        self.create_status_layout_and_select_button()
+
         self.update_selected_count()
 
     def create_checkboxes(self):
@@ -72,25 +72,23 @@ class WinPostInstaller(QWidget):
         self.layout.addLayout(columns[1])
         self.layout.addLayout(columns[2])
 
-    def create_buttons(self):
-        self.select_button = QPushButton("Выбрать и установить")
+    def create_status_layout_and_select_button(self):
+        status_layout = QVBoxLayout()
 
+        self.status_label = QLabel()
+        self.status_label.setStyleSheet("color: white;")
+        status_layout.addWidget(self.status_label, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
+
+        self.select_button = QPushButton("Выбрать и установить")
         self.select_button.setStyleSheet(
             "background-color: #F0FFFF; border-color: #9370DB; border-style: solid; border-width: 4px;"
             " border-radius: 6px; color: black;")
-
         self.select_button.clicked.connect(self.select_button_clicked)
 
-        button_layout = QHBoxLayout()
-        button_layout.addStretch(1)
+        button_layout = QVBoxLayout()
         button_layout.addWidget(self.select_button)
-        self.layout.addLayout(button_layout)
 
-    def create_status_label(self):
-        self.status_label = QLabel()
-        self.status_label.setStyleSheet("color: white;")
-        status_layout = QHBoxLayout()
-        status_layout.addWidget(self.status_label, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
+        status_layout.addLayout(button_layout)
         self.layout.addLayout(status_layout)
 
     def update_selected_count(self):
