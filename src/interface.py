@@ -40,22 +40,20 @@ class WinPostInstaller(QWidget):
         checkbox_layouts = {0: columns[0], 1: columns[1], 2: columns[2]}
         checkboxes = [
             ("Discord", f"{CURRENT_PATH_WPI}\\icons\\discord.png"),
-            ("Zoom", f"{CURRENT_PATH_WPI}\\icons\\zoom.png"),
             ("Telegram", f"{CURRENT_PATH_WPI}\\icons\\telegram.png"),
-            ("Yandex Browser", f"{CURRENT_PATH_WPI}\\icons\\yandex.png"),
             ("Vivaldi", f"{CURRENT_PATH_WPI}\\icons\\vivaldi.png"),
-            ("BraveBrowser", f"{CURRENT_PATH_WPI}\\icons\\brave.png"),
             ("Chrome", f"{CURRENT_PATH_WPI}\\icons\\chrome.png"),
-            ("AnyDesk", f"{CURRENT_PATH_WPI}\\icons\\anydesk.png"),
             ("WinRar", f"{CURRENT_PATH_WPI}\\icons\\winrar.png"),
             ("Steam", f"{CURRENT_PATH_WPI}\\icons\\steam.png"),
-            ("Epic Games", f"{CURRENT_PATH_WPI}\\icons\\epic games.png"),
             ("MSI Afterburner", f"{CURRENT_PATH_WPI}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
-            ("LA Pleer", f"{CURRENT_PATH_WPI}\\icons\\la.png"),
-            ("GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png"),
+            ("Adobe Acrobat", f"{CURRENT_PATH_WPI}\\icons\\adobe.png"),
+            ("7-Zip", f"{CURRENT_PATH_WPI}\\icons\\7zip.png"),
+            ("VLC Media Player", f"{CURRENT_PATH_WPI}\\icons\\vlc.png"),
+            ("VSCode", f"{CURRENT_PATH_WPI}\\icons\\vscode.png"),
             ("Отключить WinDef", f"{CURRENT_PATH_WPI}\\icons\\windef.png"),
             ("Отключить уведомления WD", f"{CURRENT_PATH_WPI}\\icons\\notification.png"),
+            ("Notepad++", f"{CURRENT_PATH_WPI}\\icons\\notepad.png")
         ]
 
         self.checkbox_objects = []
