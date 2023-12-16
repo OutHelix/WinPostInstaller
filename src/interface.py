@@ -54,7 +54,9 @@ class WinPostInstaller(QWidget):
             ("MSI Afterburner", f"{CURRENT_PATH_WPI}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
             ("LA Pleer", f"{CURRENT_PATH_WPI}\\icons\\la.png"),
-            ("GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png")
+            ("GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png"),
+            ("Отключить WinDef ", f"{CURRENT_PATH_WPI}\\icons\\windef.png"),
+            ("Отключить уведомления WD", f"{CURRENT_PATH_WPI}\\icons\\notification.png"),
         ]
 
         self.checkbox_objects = []
