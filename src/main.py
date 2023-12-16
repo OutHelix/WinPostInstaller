@@ -13,11 +13,12 @@ APPLICATION = {
     "Discord": "DiscordSetup.exe",
     "Telegram": "telegram.exe",
     "CPU-Z": "cpu-z.exe",
-    "LA Pleer": "LA_Setup.exe",
     "Adobe Acrobat Reader": "AcrobatReader.exe",
     "7-Zip": "7zip.exe",
     "VLC": "vlc.exe",
     "Notepad++": "notepad++.exe",
+    "Google Chrome": "chrome.exe",
+    "VSCode": "vscode.exe",
     # Приложения, которые не могут устанавливаться тихо
     "Vivaldi": "Vivaldi.exe",
     "WinRar": "winrar.exe",
