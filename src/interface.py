@@ -32,7 +32,6 @@ class WinPostInstaller(QWidget):
 
         self.create_checkboxes()
         self.create_status_layout_and_select_button()
-
         self.update_selected_count()
 
     def create_checkboxes(self):
@@ -55,7 +54,7 @@ class WinPostInstaller(QWidget):
             ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
             ("LA Pleer", f"{CURRENT_PATH_WPI}\\icons\\la.png"),
             ("GeForce Experience", f"{CURRENT_PATH_WPI}\\icons\\nvidia.png"),
-            ("Отключить WinDef ", f"{CURRENT_PATH_WPI}\\icons\\windef.png"),
+            ("Отключить WinDef", f"{CURRENT_PATH_WPI}\\icons\\windef.png"),
             ("Отключить уведомления WD", f"{CURRENT_PATH_WPI}\\icons\\notification.png"),
         ]
 
@@ -98,6 +97,12 @@ class WinPostInstaller(QWidget):
         self.status_label.setText(f"Выбрано {selected_count} пункт(ов)")
 
     def checkbox_changed(self):
+        sender_checkbox = self.sender()
+        if sender_checkbox.text() == "Отключить WinDef":
+            for checkbox in self.checkbox_objects:
+                if checkbox.text() == "Отключить уведомления WD":
+                    checkbox.setChecked(sender_checkbox.isChecked())
+                    
         self.update_selected_count()
 
     def select_button_clicked(self):
