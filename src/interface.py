@@ -42,13 +42,13 @@ class WinPostInstaller(QWidget):
             ("Steam", f"{CURRENT_PATH}\\icons\\steam.png"),
             ("MSI Afterburner", f"{CURRENT_PATH}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH}\\icons\\cpu-z.png"),
-            ("(!) Adobe Acrobat", f"{CURRENT_PATH}\\icons\\adobe.png"),
             ("7-Zip", f"{CURRENT_PATH}\\icons\\7zip.png"),
             ("(!) VLC", f"{CURRENT_PATH}\\icons\\vlc.png"),
             ("VSCode", f"{CURRENT_PATH}\\icons\\vscode.png"),
+            ("Notepad++", f"{CURRENT_PATH}\\icons\\notepad.png"),
             ("Отключить WinDef", f"{CURRENT_PATH}\\icons\\windef.png"),
             ("Отключить уведомления WD", f"{CURRENT_PATH}\\icons\\notification.png"),
-            ("Notepad++", f"{CURRENT_PATH}\\icons\\notepad.png")
+            ("Отключить автозапуск программ", f"{CURRENT_PATH}\\icons\\autostart.png")
         ]
 
         self.checkbox_objects = []

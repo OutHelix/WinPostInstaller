@@ -2,7 +2,6 @@ import time
 import zipfile
 import os
 
-import pyuac
 import requests
 import subprocess
 from PyQt6.QtWidgets import QApplication
