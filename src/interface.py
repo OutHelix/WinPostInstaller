@@ -25,7 +25,7 @@ class WinPostInstaller(QWidget):
         self.setWindowTitle("WinPostInstaller")
         self.setStyleSheet("background-color: #2C394B; color: white;")
         self.setGeometry(650, 300, 750, 400)
-        self.setFixedSize(750, 250)
+        self.setFixedSize(800, 250)
 
         self.layout = QHBoxLayout(self)
         self.setLayout(self.layout)
@@ -47,9 +47,9 @@ class WinPostInstaller(QWidget):
             ("Steam", f"{CURRENT_PATH_WPI}\\icons\\steam.png"),
             ("MSI Afterburner", f"{CURRENT_PATH_WPI}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
-            ("Adobe Acrobat", f"{CURRENT_PATH_WPI}\\icons\\adobe.png"),
+            ("(!) Adobe Acrobat", f"{CURRENT_PATH_WPI}\\icons\\adobe.png"),
             ("7-Zip", f"{CURRENT_PATH_WPI}\\icons\\7zip.png"),
-            ("VLC Media Player", f"{CURRENT_PATH_WPI}\\icons\\vlc.png"),
+            ("(!) VLC", f"{CURRENT_PATH_WPI}\\icons\\vlc.png"),
             ("VSCode", f"{CURRENT_PATH_WPI}\\icons\\vscode.png"),
             ("Отключить WinDef", f"{CURRENT_PATH_WPI}\\icons\\windef.png"),
             ("Отключить уведомления WD", f"{CURRENT_PATH_WPI}\\icons\\notification.png"),
