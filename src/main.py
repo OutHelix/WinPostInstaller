@@ -7,7 +7,10 @@ import requests
 import subprocess
 from PyQt6.QtWidgets import QApplication
 
-CURRENT_PATH = os.getcwd()[:-4]
+CURRENT_PATH = os.getcwd()
+if CURRENT_PATH.find("src"):
+    CURRENT_PATH = CURRENT_PATH[:-4]
+print(CURRENT_PATH)
 ARCHIVE_PATH = CURRENT_PATH + "\\Downloads.zip"
 EXTRACT_PATH = CURRENT_PATH + "\\Downloads"
 ARCHIVE_URL = "https://drive.google.com/uc?export=download&confirm=no_antivirus&id=14PgenzJx4GJamJTo0kCijJ7uXz2xiJWl"

@@ -1,12 +1,8 @@
-import os
 import threading
 from PyQt6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtCore import QTimer
-
-
-CURRENT_PATH_WPI = os.getcwd()[:-4]
+from main import CURRENT_PATH
 
 
 class ProgramCheckbox(QCheckBox):
@@ -35,25 +31,24 @@ class WinPostInstaller(QWidget):
         self.update_selected_count()
 
     def create_checkboxes(self):
-        print(CURRENT_PATH_WPI)
         columns = [QVBoxLayout() for _ in range(3)]
         checkbox_layouts = {0: columns[0], 1: columns[1], 2: columns[2]}
         checkboxes = [
-            ("Discord", f"{CURRENT_PATH_WPI}\\icons\\discord.png"),
-            ("Telegram", f"{CURRENT_PATH_WPI}\\icons\\telegram.png"),
-            ("Vivaldi", f"{CURRENT_PATH_WPI}\\icons\\vivaldi.png"),
-            ("Chrome", f"{CURRENT_PATH_WPI}\\icons\\chrome.png"),
-            ("WinRar", f"{CURRENT_PATH_WPI}\\icons\\winrar.png"),
-            ("Steam", f"{CURRENT_PATH_WPI}\\icons\\steam.png"),
-            ("MSI Afterburner", f"{CURRENT_PATH_WPI}\\icons\\msi.png"),
-            ("CPU-Z", f"{CURRENT_PATH_WPI}\\icons\\cpu-z.png"),
-            ("(!) Adobe Acrobat", f"{CURRENT_PATH_WPI}\\icons\\adobe.png"),
-            ("7-Zip", f"{CURRENT_PATH_WPI}\\icons\\7zip.png"),
-            ("(!) VLC", f"{CURRENT_PATH_WPI}\\icons\\vlc.png"),
-            ("VSCode", f"{CURRENT_PATH_WPI}\\icons\\vscode.png"),
-            ("Отключить WinDef", f"{CURRENT_PATH_WPI}\\icons\\windef.png"),
-            ("Отключить уведомления WD", f"{CURRENT_PATH_WPI}\\icons\\notification.png"),
-            ("Notepad++", f"{CURRENT_PATH_WPI}\\icons\\notepad.png")
+            ("Discord", f"{CURRENT_PATH}\\icons\\discord.png"),
+            ("Telegram", f"{CURRENT_PATH}\\icons\\telegram.png"),
+            ("Vivaldi", f"{CURRENT_PATH}\\icons\\vivaldi.png"),
+            ("Chrome", f"{CURRENT_PATH}\\icons\\chrome.png"),
+            ("WinRar", f"{CURRENT_PATH}\\icons\\winrar.png"),
+            ("Steam", f"{CURRENT_PATH}\\icons\\steam.png"),
+            ("MSI Afterburner", f"{CURRENT_PATH}\\icons\\msi.png"),
+            ("CPU-Z", f"{CURRENT_PATH}\\icons\\cpu-z.png"),
+            ("(!) Adobe Acrobat", f"{CURRENT_PATH}\\icons\\adobe.png"),
+            ("7-Zip", f"{CURRENT_PATH}\\icons\\7zip.png"),
+            ("(!) VLC", f"{CURRENT_PATH}\\icons\\vlc.png"),
+            ("VSCode", f"{CURRENT_PATH}\\icons\\vscode.png"),
+            ("Отключить WinDef", f"{CURRENT_PATH}\\icons\\windef.png"),
+            ("Отключить уведомления WD", f"{CURRENT_PATH}\\icons\\notification.png"),
+            ("Notepad++", f"{CURRENT_PATH}\\icons\\notepad.png")
         ]
 
         self.checkbox_objects = []
@@ -100,7 +95,7 @@ class WinPostInstaller(QWidget):
             for checkbox in self.checkbox_objects:
                 if checkbox.text() == "Отключить уведомления WD":
                     checkbox.setChecked(sender_checkbox.isChecked())
-                    
+
         self.update_selected_count()
 
     def select_button_clicked(self):
@@ -111,7 +106,8 @@ class WinPostInstaller(QWidget):
             self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
 
     def start_download(self, selected_checkboxes, url, path):
-        download_thread = threading.Thread(target=self.download_and_extract_threaded, args=(selected_checkboxes, url, path))
+        download_thread = threading.Thread(target=self.download_and_extract_threaded,
+                                           args=(selected_checkboxes, url, path))
         download_thread.start()
 
     def download_and_extract_threaded(self, selected_checkboxes, url, path):
