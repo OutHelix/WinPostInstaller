@@ -1,7 +1,8 @@
 import threading
-from PyQt6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
-from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtWidgets import QMessageBox
 from main import CURRENT_PATH
 
 
@@ -10,6 +11,25 @@ class ProgramCheckbox(QCheckBox):
         super().__init__(text)
         self.setIcon(QIcon(icon_path))
         self.setIconSize(QSize(20, 20))
+
+
+def message_after_select_button_clicked():
+    message_box = QMessageBox()
+    message_box.setStyleSheet(
+        "background-color: #2C394B; color: white;"
+        "font: 12pt;"
+    )
+    message_box.setText("Убедитесь, что вашей системой является Windows 10 (64-бит)")
+    message_box.setWindowTitle("Внимание")
+    message_box.setIcon(QMessageBox.Icon.Information)
+
+    ok_button = message_box.addButton(QMessageBox.StandardButton.Ok)
+    ok_button.setStyleSheet(
+        "background-color: #F0FFFF; border-color: #9370DB; border-style: solid; border-width: 3px;"
+        " border-radius: 6px; color: black; min-width: 100px; min-height: 30px;"
+    )
+
+    message_box.exec()
 
 
 class WinPostInstaller(QWidget):
@@ -73,7 +93,7 @@ class WinPostInstaller(QWidget):
         self.status_label.setStyleSheet("color: white;")
         status_layout.addWidget(self.status_label, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
 
-        self.select_button = QPushButton("Выбрать и установить")
+        self.select_button = QPushButton("Установить")
         self.select_button.setStyleSheet(
             "background-color: #F0FFFF; border-color: #9370DB; border-style: solid; border-width: 4px;"
             " border-radius: 6px; color: black;")
@@ -103,6 +123,7 @@ class WinPostInstaller(QWidget):
 
         if selected_checkboxes:
             from main import ARCHIVE_URL, ARCHIVE_PATH
+            message_after_select_button_clicked()
             self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
 
     def start_download(self, selected_checkboxes, url, path):
