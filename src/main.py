@@ -1,6 +1,8 @@
 import time
 import zipfile
 import os
+
+import pyuac
 import requests
 import subprocess
 from PyQt6.QtWidgets import QApplication
@@ -14,13 +16,12 @@ APPLICATION = {
     "Discord": "DiscordSetup.exe",
     "Telegram": "telegram.exe",
     "CPU-Z": "cpu-z.exe",
-    "Adobe Acrobat Reader": "AdobeAR.exe",
+    "Adobe Acrobat": "AdobeAR.exe",
     "7-Zip": "7z.exe",
     "VLC": "vlc.exe",
     "Notepad++": "npp.exe",
-    "Google Chrome": "ChromeSetup.exe",
+    "Chrome": "ChromeSetup.exe",
     "VSCode": "VSCode.exe",
-    # Приложения, которые не могут устанавливаться тихо
     "Vivaldi": "Vivaldi.exe",
     "WinRar": "winrar.exe",
     "Steam": "SteamSetup.exe",
@@ -34,10 +35,9 @@ SILENT_INSTALL_APPS = {
     "CPU-Z",
     "7-Zip",
     "LA Pleer",
-    "Adobe Acrobat Reader",
-    "VLC",
+    # "Adobe Acrobat", - возможно убран навсегда
+    # "VLC", - временно убран
     "Notepad++",
-    "Google Chrome",
     "VSCode"
 }
 
@@ -71,7 +71,6 @@ def download_and_extract(url, save_path, selection, update_status_callback):
         update_status_callback("Ошибка: архив не найден")
         time.sleep(1)
         download_archive(url, save_path, update_status_callback)
-
     if os.path.exists(ARCHIVE_PATH):
         # Извлекаем выбранные приложения
         with zipfile.ZipFile(ARCHIVE_PATH, "r") as archive:
@@ -81,7 +80,8 @@ def download_and_extract(url, save_path, selection, update_status_callback):
                     archive.extract(app_file, EXTRACT_PATH)
                     print(f"Приложение {app} успешно извлечено!")
         # install_extracted_programs(update_status_callback)
-        update_status_callback("Установка завершена")
+                    update_status_callback(f"{app} распакован")
+        time.sleep(1)
 
     silent_install_apps = [app for app in selection if app in SILENT_INSTALL_APPS]
     regular_install_apps = [app for app in selection if app not in SILENT_INSTALL_APPS]
@@ -89,14 +89,16 @@ def download_and_extract(url, save_path, selection, update_status_callback):
     # Установка тихих приложений
     for app in silent_install_apps:
         if app in APPLICATION:
-            print(app)
             app_file = os.path.join(EXTRACT_PATH, APPLICATION[app])
-            print(app_file)
             if app == "7-Zip":
+                update_status_callback(f"{app} устанвливается.")
                 subprocess.run([app_file, "/S"], check=True, shell=True)
             else:
-                subprocess.run([app_file, "/silent", "/verysilent", "/quiet", "/qn"], check=True, shell=True)
+                update_status_callback(f"{app} устанвливается.")
+                subprocess.run([app_file, "/S", "/silent", "/verysilent", "/quiet", "/qn"], check=True, shell=True)
+            update_status_callback(f"{app} установлен.")
             print(f"Приложение {app} установлено тихо.")
+            time.sleep(2)
 
     # Установка остальных приложений
     for app in regular_install_apps:
@@ -104,6 +106,8 @@ def download_and_extract(url, save_path, selection, update_status_callback):
             app_file = os.path.join(EXTRACT_PATH, APPLICATION[app])
             subprocess.run([app_file], check=True, shell=True)  # Обычная установка
             print(f"Приложение {app} установлено.")
+            update_status_callback(f"{app} установлен.")
+            time.sleep(2)
 
 
 # def install_extracted_programs(update_status_callback):
