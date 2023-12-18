@@ -19,7 +19,8 @@ def message_after_select_button_clicked():
         "background-color: #2C394B; color: white;"
         "font: 12pt;"
     )
-    message_box.setText("Убедитесь, что вашей системой является Windows 10 (64-бит)")
+    message_box.setText("Убедитесь, что вашей системой является\nWindows 10 (64-бит) и программа запущена от "
+                        "имени Администратора")
     message_box.setWindowTitle("Внимание")
     message_box.setIcon(QMessageBox.Icon.Information)
 
@@ -84,6 +85,9 @@ class WinPostInstaller(QWidget):
         self.layout.addLayout(columns[1])
         self.layout.addLayout(columns[2])
 
+        for checkbox in self.checkbox_objects:
+            checkbox.stateChanged.connect(self.update_selected_count)
+
     def create_status_layout_and_select_button(self):
         status_layout = QVBoxLayout()
 
@@ -120,6 +124,8 @@ class WinPostInstaller(QWidget):
             else:
                 self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
 
+        self.update_selected_count()
+
     def start_download(self, selected_checkboxes, url, path):
         download_thread = threading.Thread(target=self.download_and_extract_threaded,
                                            args=(selected_checkboxes, url, path))
@@ -132,6 +138,8 @@ class WinPostInstaller(QWidget):
         if self.disable_autostart_after_install:
             success = disable_autostart()
             self.update_status("Автозагрузка отключена" if success else "Ошибка отключении\nавтозагрузки")
+
+        self.update_selected_count()
 
     def update_status(self, text):
         self.status_label.setText(f"Статус: {text}")
