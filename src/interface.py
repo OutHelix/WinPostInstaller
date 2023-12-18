@@ -127,16 +127,16 @@ class WinPostInstaller(QWidget):
         self.update_selected_count()
 
     def start_download(self, selected_checkboxes, url, path):
-        download_thread = threading.Thread(target=self.download_and_extract_threaded,
+        download_thread = threading.Thread(target=self.download_archive_threaded,
                                            args=(selected_checkboxes, url, path))
         download_thread.start()
 
-    def download_and_extract_threaded(self, selected_checkboxes, url, path):
-        from main import download_and_extract, disable_autostart
-        download_and_extract(url, path, selected_checkboxes, self.update_status)
+    def download_archive_threaded(self, selected_checkboxes, url, path):
+        from main import download_archive, disable_autostart
+        download_archive(url, path, selected_checkboxes, self.update_status)
 
         if self.disable_autostart_after_install:
-            success = disable_autostart()
+            success = disable_autostart(self.update_status)
             self.update_status("Автозагрузка отключена" if success else "Ошибка отключении\nавтозагрузки")
 
         self.update_selected_count()
