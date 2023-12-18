@@ -36,7 +36,6 @@ SILENT_INSTALL_APPS = {
     "CPU-Z",
     "7-Zip",
     "LA Pleer",
-    # "VLC", - временно убран из тихой установки
     "Notepad++",
     "VSCode"
 }
@@ -49,9 +48,11 @@ def download_archive(url, save_path, selection, update_status_callback, count):
             update_status_callback("Ошибка: архив не найден")
             time.sleep(1)
 
+            # Получение содержимого архива по URL
             response = requests.get(url, stream=True)
             total_length = response.headers.get('content-length')
 
+            # Загрузка архива по частям или целиком в зависимости от информации о размере
             if total_length is None:
                 with open(save_path, 'wb') as file:
                     file.write(response.content)
@@ -67,6 +68,7 @@ def download_archive(url, save_path, selection, update_status_callback, count):
                         update_status_callback(f"Скачивается... {done}%")
                 update_status_callback("Скачивание завершено")
 
+        # Извлечение приложений из архива после загрузки
         extract_applications(url, save_path, selection, update_status_callback)
 
     except Exception as e:
@@ -74,15 +76,19 @@ def download_archive(url, save_path, selection, update_status_callback, count):
         if count <= 3:
             download_archive(url, save_path, selection, update_status_callback, count)
         update_status_callback("Ошибка при скачивании архива\nпроверьте подключение к интернету")
+        print(f"Ошибка при скачивании архива: {e}")
 
 
+# Извлечение приложений из архива
 def extract_applications(url, save_path, selection, update_status_callback):
     try:
+        # Проверка наличия архива для извлечения приложений
         if not os.path.exists(ARCHIVE_PATH):
             update_status_callback("Ошибка: архив не найден")
             time.sleep(1)
-            download_archive(url, save_path, update_status_callback)
+            download_archive(url, save_path, selection,update_status_callback, 0)
         if os.path.exists(ARCHIVE_PATH):
+            # Извлечение выбранных приложений из архива
             with zipfile.ZipFile(ARCHIVE_PATH, "r") as archive:
                 for app in selection:
                     if app in APPLICATION:
@@ -97,11 +103,14 @@ def extract_applications(url, save_path, selection, update_status_callback):
         print(f"Ошибка в extract_applications: {e}")
 
 
+# Установка приложений
 def install_applications(selection, update_status_callback):
     try:
+        # Разделение приложений на тихую и обычную установки
         silent_install_apps = [app for app in selection if app in SILENT_INSTALL_APPS]
         regular_install_apps = [app for app in selection if app not in SILENT_INSTALL_APPS]
 
+        # Установка тихих приложений
         for app in silent_install_apps:
             if app in APPLICATION:
                 app_file = os.path.join(EXTRACT_PATH, APPLICATION[app])
@@ -115,6 +124,7 @@ def install_applications(selection, update_status_callback):
                 print(f"Приложение {app} установлено тихо.")
                 time.sleep(2)
 
+        # Установка обычных приложений
         for app in regular_install_apps:
             if app in APPLICATION:
                 app_file = os.path.join(EXTRACT_PATH, APPLICATION[app])
@@ -131,6 +141,7 @@ def install_applications(selection, update_status_callback):
         update_status_callback("Ошибка при установке.\n")
 
 
+# Функция для отключения автозагрузки приложений
 def disable_autostart(update_status_callback):
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run",
@@ -138,15 +149,15 @@ def disable_autostart(update_status_callback):
         i = 0
         while True:
             try:
-                name, value, type = winreg.EnumValue(key, i)
-                winreg.DeleteValue(key, name)
+                name, value, type = winreg.EnumValue(key, i)  # Получение имени, значения и типа каждой записи
+                winreg.DeleteValue(key, name)  # Удаление
                 update_status_callback(f"Автозагрузка отключена:\n{name}")
                 print(f"Автозагрузка отключена для: {name}")
                 time.sleep(0.5)
             except OSError:
                 break
             i += 1
-        winreg.CloseKey(key)
+        winreg.CloseKey(key)  # Закрытие ключа реестра
         return True
     except Exception as e:
         print(f"Ошибка при отключении автозагрузки: {e}")
@@ -154,12 +165,13 @@ def disable_autostart(update_status_callback):
         return False
 
 
+# Функция для удаления извлеченных приложений
 def remove_extracted_applications():
     try:
         if os.path.exists(EXTRACT_PATH):
             for file_name in os.listdir(EXTRACT_PATH):
                 file_path = os.path.join(EXTRACT_PATH, file_name)
-                if os.path.isfile(file_path):
+                if os.path.isfile(file_path):  # Проверка, является ли объект файлом
                     os.remove(file_path)
                     print(f"Удален файл: {file_name}")
                     time.sleep(0.5)
@@ -170,12 +182,14 @@ def remove_extracted_applications():
 
 
 if __name__ == "__main__":
+    # Создание приложения GUI
     app = QApplication([])
     app.setApplicationName("WinPostInstaller")
 
+    # Загрузка интерфейса приложения
     from interface import WinPostInstaller
 
     win_post_installer = WinPostInstaller()
     win_post_installer.show()
 
-    app.exec()
+    app.exec()  # Запуск главного цикла приложения
