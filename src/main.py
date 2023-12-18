@@ -1,4 +1,5 @@
 import time
+import winreg
 import zipfile
 import os
 
@@ -9,7 +10,6 @@ from PyQt6.QtWidgets import QApplication
 CURRENT_PATH = os.getcwd()
 if CURRENT_PATH.find("src"):
     CURRENT_PATH = CURRENT_PATH[:-4]
-print(CURRENT_PATH)
 ARCHIVE_PATH = CURRENT_PATH + "\\Downloads.zip"
 EXTRACT_PATH = CURRENT_PATH + "\\Downloads"
 ARCHIVE_URL = "https://drive.google.com/uc?export=download&confirm=no_antivirus&id=14PgenzJx4GJamJTo0kCijJ7uXz2xiJWl"
@@ -112,56 +112,27 @@ def download_and_extract(url, save_path, selection, update_status_callback):
             time.sleep(2)
 
 
-# def install_extracted_programs(update_status_callback):
-#     files = os.listdir(EXTRACT_PATH)
-#
-#     exe_files = [file for file in files if file.lower().endswith('.exe')]
-#     for exe_file in exe_files:
-#         exe_path = os.path.join(EXTRACT_PATH, exe_file)
-#
-#         install_command = f'"{exe_path}" /S'
-#         try:
-#             subprocess.run(install_command, shell=True, check=True)
-#             update_status_callback(f'{exe_file} успешно установлен.')
-#         except subprocess.CalledProcessError as e:
-#             update_status_callback(f'Ошибка при установке {exe_file}: {e}')
-#
-#
-# def photo_wiever():
-#     extensions = ['.jpg', '.jpeg', '.gif', '.png', '.bmp', '.tiff', '.ico']
-#     assoc_value = 'PhotoViewer.FileAssoc.Tiff'
-#
-#     for extension in extensions:
-#         command = f'reg add HKCU\Software\Classes\{extension} /ve /t REG_SZ /d {assoc_value} /f'
-#         subprocess.run(command, shell=True)
-#
-#
-# def defender_off():
-#     command1 = 'REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d 1 /f'
-#
-#     command2 = 'REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d 1 /f'
-#     command3 = 'REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d 1 /f'
-#     command4 = 'REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d 1 /f'
-#
-#     command5 = 'REG ADD "HKLM\SYSTEM\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d 3 /f'
-#
-#     subprocess.run(command1, shell=True)
-#     subprocess.run(command2, shell=True)
-#     subprocess.run(command3, shell=True)
-#     subprocess.run(command4, shell=True)
-#     subprocess.run(command5, shell=True)
-#
-#
-# def defender_notifications_off():
-#     subprocess.run(["netsh", "advfirewall", "set", "allprofiles", "state", "off"])
-#     key_path = r"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Defender Security Center\\Notifications"
-#     # Команда для добавления значения DisableNotifications
-#     command_disable_notifications = f'reg add "{key_path}" /v "DisableNotifications" /t REG_DWORD /d 1 /f'
-#     # Команда для добавления значения DisableEnhancedNotifications
-#     command_disable_enhanced_notifications = f'reg add "{key_path}" /v "DisableEnhancedNotifications" /t REG_DWORD /d 1 /f'
-#     # Выполняем команды через subprocess
-#     subprocess.run(command_disable_notifications, shell=True)
-#     subprocess.run(command_disable_enhanced_notifications, shell=True)
+def disable_autostart(update_status_callback):
+    try:
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run",
+                             0, winreg.KEY_ALL_ACCESS)
+        i = 0
+        while True:
+            try:
+                name, value, type = winreg.EnumValue(key, i)
+                winreg.DeleteValue(key, name)
+                update_status_callback(f"Автозагрузка отключена:\n{name}")
+                print(f"Автозагрузка отключена для: {name}")
+                time.sleep(0.5)
+            except OSError:
+                break
+            i += 1
+        winreg.CloseKey(key)
+        return True
+    except Exception as e:
+        print(f"Ошибка при отключении автозагрузки: {e}")
+        update_status_callback("Ошибка при отключении\nавтозагрузки")
+        return False
 
 
 if __name__ == "__main__":

@@ -29,19 +29,21 @@ def message_after_select_button_clicked():
         " border-radius: 6px; color: black; min-width: 100px; min-height: 30px;"
     )
 
-    message_box.exec()
+    result = message_box.exec()  # Получаем результат диалога и отображаем сообщение
+    return result == QMessageBox.StandardButton.Ok
 
 
 class WinPostInstaller(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
+        self.message_shown = False
 
     def init_ui(self):
         self.setWindowTitle("WinPostInstaller")
         self.setStyleSheet("background-color: #2C394B; color: white;")
         self.setGeometry(650, 300, 750, 400)
-        self.setFixedSize(800, 250)
+        self.setFixedSize(700, 250)
 
         self.layout = QHBoxLayout(self)
         self.setLayout(self.layout)
@@ -63,12 +65,9 @@ class WinPostInstaller(QWidget):
             ("MSI Afterburner", f"{CURRENT_PATH}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH}\\icons\\cpu-z.png"),
             ("7-Zip", f"{CURRENT_PATH}\\icons\\7zip.png"),
-            ("(!) VLC", f"{CURRENT_PATH}\\icons\\vlc.png"),
+            ("Отключить автозапуск \nпрограмм", f"{CURRENT_PATH}\\icons\\autostart.png"),
             ("VSCode", f"{CURRENT_PATH}\\icons\\vscode.png"),
             ("Notepad++", f"{CURRENT_PATH}\\icons\\notepad.png"),
-            ("Отключить WinDef", f"{CURRENT_PATH}\\icons\\windef.png"),
-            ("Отключить уведомления WD", f"{CURRENT_PATH}\\icons\\notification.png"),
-            ("Отключить автозапуск программ", f"{CURRENT_PATH}\\icons\\autostart.png")
         ]
 
         self.checkbox_objects = []
@@ -79,7 +78,6 @@ class WinPostInstaller(QWidget):
 
             column_index = checkboxes.index((text, icon_path)) % 3
             checkbox_layouts[column_index].addWidget(checkbox)
-            checkbox.stateChanged.connect(self.checkbox_changed)
 
         self.layout.addSpacing(20)
         self.layout.addLayout(columns[0])
@@ -109,22 +107,18 @@ class WinPostInstaller(QWidget):
         selected_count = sum(checkbox.isChecked() for checkbox in self.checkbox_objects)
         self.status_label.setText(f"Выбрано {selected_count} пункт(ов)")
 
-    def checkbox_changed(self):
-        sender_checkbox = self.sender()
-        if sender_checkbox.text() == "Отключить WinDef":
-            for checkbox in self.checkbox_objects:
-                if checkbox.text() == "Отключить уведомления WD":
-                    checkbox.setChecked(sender_checkbox.isChecked())
-
-        self.update_selected_count()
-
     def select_button_clicked(self):
         selected_checkboxes = [checkbox.text() for checkbox in self.checkbox_objects if checkbox.isChecked()]
+        self.disable_autostart_after_install = "Отключить автозапуск \nпрограмм" in selected_checkboxes
 
         if selected_checkboxes:
             from main import ARCHIVE_URL, ARCHIVE_PATH
-            message_after_select_button_clicked()
-            self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
+            if not self.message_shown:
+                self.message_shown = True
+                if message_after_select_button_clicked():
+                    self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
+            else:
+                self.start_download(selected_checkboxes, ARCHIVE_URL, ARCHIVE_PATH)
 
     def start_download(self, selected_checkboxes, url, path):
         download_thread = threading.Thread(target=self.download_and_extract_threaded,
@@ -132,8 +126,12 @@ class WinPostInstaller(QWidget):
         download_thread.start()
 
     def download_and_extract_threaded(self, selected_checkboxes, url, path):
-        from main import download_and_extract
+        from main import download_and_extract, disable_autostart
         download_and_extract(url, path, selected_checkboxes, self.update_status)
+
+        if self.disable_autostart_after_install:
+            success = disable_autostart()
+            self.update_status("Автозагрузка отключена" if success else "Ошибка отключении\nавтозагрузки")
 
     def update_status(self, text):
         self.status_label.setText(f"Статус: {text}")
