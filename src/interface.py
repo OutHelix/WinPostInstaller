@@ -133,7 +133,7 @@ class WinPostInstaller(QWidget):
 
     def download_archive_threaded(self, selected_checkboxes, url, path):
         from main import download_archive, disable_autostart
-        download_archive(url, path, selected_checkboxes, self.update_status)
+        download_archive(url, path, selected_checkboxes, self.update_status, 0)
 
         if self.disable_autostart_after_install:
             success = disable_autostart(self.update_status)
