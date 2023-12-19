@@ -38,10 +38,14 @@ To use the app, you can either set it up in an IDE or run the standalone executa
 To set up the project in your preferred Integrated Development Environment (IDE), follow these steps:
 
 - Clone the repository to your computer using the following Git command:
+```
 git clone https://github.com/OutHelix/WinPostInstaller.git
+```
 - Open the cloned repository in your IDE.
 - Install the necessary dependencies by executing:
+```
 pip install -r requirements.txt
+```
 
 Copy code in the terminal at the root directory of the project.
 - Run `main.py` to start the application.
