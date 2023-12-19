@@ -66,7 +66,7 @@ class WinPostInstaller(QWidget):
             ("MSI Afterburner", f"{CURRENT_PATH}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH}\\icons\\cpu-z.png"),
             ("7-Zip", f"{CURRENT_PATH}\\icons\\7zip.png"),
-            ("Отключить автозапуск \nпрограмм", f"{CURRENT_PATH}\\icons\\autostart.png"),
+            ("Отключить автозапуск \nпрограмм внутри реестра", f"{CURRENT_PATH}\\icons\\autostart.png"),
             ("VSCode", f"{CURRENT_PATH}\\icons\\vscode.png"),
             ("Notepad++", f"{CURRENT_PATH}\\icons\\notepad.png"),
         ]
