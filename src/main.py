@@ -138,7 +138,8 @@ def install_applications(selection, update_status_callback):
 
     except Exception as e:
         print(f"Ошибка в install_applications: {e}")
-        update_status_callback("Ошибка при установке.\n")
+        update_status_callback("Ошибка при установке.")
+        time.sleep(3)
 
 
 # Функция для отключения автозагрузки приложений

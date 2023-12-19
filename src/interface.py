@@ -1,9 +1,10 @@
+import os
 import threading
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QMessageBox
-from main import CURRENT_PATH
+from main import CURRENT_PATH, ARCHIVE_PATH
 
 
 class ProgramCheckbox(QCheckBox):
@@ -19,8 +20,11 @@ def message_after_select_button_clicked():
         "background-color: #2C394B; color: white;"
         "font: 12pt;"
     )
+    message = ""
+    if not os.path.exists(ARCHIVE_PATH):
+        message += "\n\nОбратите внимание, что размер архива: 445 МБ\n(Архив отсутствует)"
     message_box.setText("Убедитесь, что вашей системой является\nWindows 10 (64-бит) и программа запущена от "
-                        "имени Администратора")
+                        "имени Администратора" + message)
     message_box.setWindowTitle("Внимание")
     message_box.setIcon(QMessageBox.Icon.Information)
 
@@ -57,7 +61,7 @@ class WinPostInstaller(QWidget):
         columns = [QVBoxLayout() for _ in range(3)]
         checkbox_layouts = {0: columns[0], 1: columns[1], 2: columns[2]}
         checkboxes = [
-            ("Discord", f"{CURRENT_PATH}\\icons\\discord.png"),
+            ("7-Zip", f"{CURRENT_PATH}\\icons\\7zip.png"),
             ("Telegram", f"{CURRENT_PATH}\\icons\\telegram.png"),
             ("Vivaldi", f"{CURRENT_PATH}\\icons\\vivaldi.png"),
             ("Chrome", f"{CURRENT_PATH}\\icons\\chrome.png"),
@@ -65,7 +69,7 @@ class WinPostInstaller(QWidget):
             ("Steam", f"{CURRENT_PATH}\\icons\\steam.png"),
             ("MSI Afterburner", f"{CURRENT_PATH}\\icons\\msi.png"),
             ("CPU-Z", f"{CURRENT_PATH}\\icons\\cpu-z.png"),
-            ("7-Zip", f"{CURRENT_PATH}\\icons\\7zip.png"),
+            ("Discord", f"{CURRENT_PATH}\\icons\\discord.png"),
             ("Отключить автозапуск \nпрограмм внутри реестра", f"{CURRENT_PATH}\\icons\\autostart.png"),
             ("VSCode", f"{CURRENT_PATH}\\icons\\vscode.png"),
             ("Notepad++", f"{CURRENT_PATH}\\icons\\notepad.png"),
